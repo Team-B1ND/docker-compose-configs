@@ -1,0 +1,25 @@
+# Docker
+*.log
+*.tmp
+docker-compose.override.yml
+
+# IDEs
+.vscode/
+.idea/
+*.iml
+
+# Operating System
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Build artifacts
+build/
+dist/
+
+# Logs
+logs/
+*.log
+
+# Environment variables
+.env

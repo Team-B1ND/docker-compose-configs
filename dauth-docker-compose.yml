@@ -1,0 +1,26 @@
+version: '3.8'
+
+networks:
+  dauth-redis-net:
+    driver: bridge
+
+services:
+  dodam-oauth:
+    image: teamb1nd/dodam-oauth:latest
+    ports:
+      - "8003:8003"
+    networks:
+      - dodam-redis-net
+
+services:
+  dodam-open-api:
+    image: teamb1nd/dodam-open-api:latest
+    ports:
+      - "8010:8010"
+
+services:
+  dauth-redis:
+    image: redis:alpine
+    port: "6379:6379"
+    networks:
+      - dodam-redis-net

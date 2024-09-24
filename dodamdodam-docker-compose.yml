@@ -1,0 +1,50 @@
+version: '3.8'
+
+networks:
+  dodam-redis-net:
+    driver: bridge
+
+services:
+  dodamdodam:
+    image: teamb1nd/dodamdodam:latest
+    ports:
+      - "33333:8080"
+    networks:
+      - dodam-redis-net
+
+  token-server:
+    image: teamb1nd/token-server:latest
+    ports:
+      - "8003:8003"
+    networks:
+      - dodam-redis-net
+
+  redis:
+    container_name: dodam-redis
+    image: redis:alpine
+    ports:
+      - "6380:6379"
+    networks:
+      - dodam-redis-net
+
+  redis-slave-1:
+    container_name: dodam-redis1
+    image: redis:alpine
+    command: redis-server --slaveof redis 6379
+    ports:
+      - "6479:6379"
+    depends_on:
+      - redis
+    networks:
+      - dodam-redis-net
+
+  redis-slave-2:
+    container_name: dodam-redis2
+    image: redis:alpine
+    command: redis-server --slaveof redis 6379
+    ports:
+      - "6579:6379"
+    depends_on:
+      - redis
+    networks:
+      - dodam-redis-net

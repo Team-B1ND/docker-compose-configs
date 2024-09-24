@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  dgit:
+    image: teamb1nd/dgit:latest
+    ports:
+      - "3586:8080" 
+    environment:
+      - DB_HOST=${{ secrets.DB_HOST }}
+      - DB_PORT=${{ secrets.DB_PORT }}
+      - DB_USER=${{ secrets.DB_USER }}
+      - DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+    depends_on:
+      - dgit-mysql
+    restart: no
+
+  dgit-mysql:
+    image: mysql:5.7
+    ports:
+      - "33307:3306"
+    volumes:
+      - dgit-mysql-data:/var/lib/mysql
+    networks:
+      - dgit-net
+
+networks:
+  dgit-net:
+    driver: bridge
+
+volumes:
+  dgit-mysql-data:
