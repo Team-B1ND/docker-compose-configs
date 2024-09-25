@@ -8,6 +8,10 @@ networks:
 
 services:
   dodam-oauth:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      platform: linux/arm64
     image: teamb1nd/dodam-oauth:latest
     ports:
       - "8003:8003"
@@ -16,6 +20,10 @@ services:
       - nginx-net
 
   dodam-open-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      platform: linux/arm64
     image: teamb1nd/dodam-open-api:latest
     ports:
       - "8010:8010"

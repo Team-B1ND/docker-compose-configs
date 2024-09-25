@@ -8,6 +8,10 @@ networks:
 
 services:
   dodamdodam:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      platform: linux/arm64
     image: teamb1nd/dodamdodam:latest
     ports:
       - "33333:8080"
@@ -16,6 +20,10 @@ services:
       - nginx-net
 
   token-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      platform: linux/arm64
     image: teamb1nd/token-server:latest
     ports:
       - "8003:8003"

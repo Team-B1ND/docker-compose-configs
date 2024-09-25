@@ -2,6 +2,10 @@ version: '3.8'
 
 services:
   dgit:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      platform: linux/arm64
     image: teamb1nd/dgit:latest
     ports:
       - "3586:8080" 
