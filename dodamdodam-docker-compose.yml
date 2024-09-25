@@ -3,6 +3,8 @@ version: '3.8'
 networks:
   dodam-redis-net:
     driver: bridge
+  nginx-net:
+    external: true
 
 services:
   dodamdodam:
@@ -11,6 +13,7 @@ services:
       - "33333:8080"
     networks:
       - dodam-redis-net
+      - nginx-net
 
   token-server:
     image: teamb1nd/token-server:latest
@@ -18,6 +21,7 @@ services:
       - "8003:8003"
     networks:
       - dodam-redis-net
+      - nginx-net
 
   redis:
     container_name: dodam-redis
@@ -26,6 +30,7 @@ services:
       - "6380:6379"
     networks:
       - dodam-redis-net
+      - nginx-net
 
   redis-slave-1:
     container_name: dodam-redis1
@@ -37,6 +42,7 @@ services:
       - redis
     networks:
       - dodam-redis-net
+      - nginx-net
 
   redis-slave-2:
     container_name: dodam-redis2
@@ -48,3 +54,4 @@ services:
       - redis
     networks:
       - dodam-redis-net
+      - nginx-net

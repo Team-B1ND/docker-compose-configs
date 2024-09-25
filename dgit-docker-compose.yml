@@ -12,6 +12,8 @@ services:
       - DB_PASSWORD=${{ secrets.DB_PASSWORD }}
     depends_on:
       - dgit-mysql
+    networks:
+      - nginx-net
     restart: no
 
   dgit-mysql:
@@ -22,10 +24,13 @@ services:
       - dgit-mysql-data:/var/lib/mysql
     networks:
       - dgit-net
+      - nginx-net
 
 networks:
   dgit-net:
     driver: bridge
+  nginx-net:
+    external: true
 
 volumes:
   dgit-mysql-data:
