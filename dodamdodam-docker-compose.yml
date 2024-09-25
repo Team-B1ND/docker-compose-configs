@@ -11,8 +11,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      platform: linux/arm64
     image: teamb1nd/dodamdodam:latest
+    platform: linux/arm64
     ports:
       - "33333:8080"
     networks:
@@ -23,8 +23,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      platform: linux/arm64
     image: teamb1nd/token-server:latest
+    platform: linux/arm64
     ports:
       - "8003:8003"
     networks:

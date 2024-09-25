@@ -11,8 +11,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      platform: linux/arm64
     image: teamb1nd/dodam-oauth:latest
+    platform: linux/arm64
     ports:
       - "8003:8003"
     networks:
@@ -23,8 +23,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      platform: linux/arm64
     image: teamb1nd/dodam-open-api:latest
+    platform: linux/arm64
     ports:
       - "8010:8010"
     networks:
