@@ -11,7 +11,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: teamb1nd/dodamdodam:latest
+    image: teamb1nd/dodamdodam-one:latest
     platform: linux/arm64
     ports:
       - "33333:8080"
