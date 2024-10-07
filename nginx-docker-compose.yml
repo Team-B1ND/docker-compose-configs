@@ -1,5 +1,6 @@
 services:
   nginx:
+    container-name: nginx-server
     image: nginx:latest
     ports:
       - "80:80" 
