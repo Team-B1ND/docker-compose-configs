@@ -1,5 +1,3 @@
-version: '3.8'
-
 networks:
   dauth-redis-net:
     driver: bridge
