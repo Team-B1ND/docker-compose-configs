@@ -7,9 +7,6 @@ networks:
 services:
   dodam-oauth:
     container_name: dodam-oauth-server
-    build:
-      context: .
-      dockerfile: Dockerfile
     image: teamb1nd/dodam-oauth:latest
     platform: linux/arm64
     ports:
@@ -20,9 +17,6 @@ services:
 
   dodam-open-api:
     container_name: dodam-open-api-server
-    build:
-      context: .
-      dockerfile: Dockerfile
     image: teamb1nd/dodam-open-api:latest
     platform: linux/arm64
     ports:

@@ -1,9 +1,6 @@
 services:
   dgit:
     container_name: dgit-server
-    build:
-      context: .
-      dockerfile: Dockerfile
     image: teamb1nd/dgit:latest
     platform: linux/arm64
     ports:

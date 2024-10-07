@@ -7,9 +7,6 @@ networks:
 services:
   dodamdodam:
     container_name: dodamdodam-server
-    build:
-      context: .
-      dockerfile: Dockerfile
     image: teamb1nd/dodamdodam-one:latest
     platform: linux/arm64
     ports:
@@ -20,9 +17,6 @@ services:
 
   token-server:
     container_name: dodam-token-server
-    build:
-      context: .
-      dockerfile: Dockerfile
     image: teamb1nd/token-server:latest
     platform: linux/arm64
     ports:
