@@ -20,7 +20,7 @@ services:
     image: teamb1nd/token-server:latest
     platform: linux/arm64
     ports:
-      - "8003:8003"
+      - "8050:8050"
     networks:
       - dodam-redis-net
       - nginx-net
