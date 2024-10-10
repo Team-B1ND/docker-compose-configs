@@ -12,7 +12,7 @@ services:
     ports:
       - "8003:8003"
     networks:
-      - dodam-redis-net
+      - dauth-redis-net
       - nginx-net
 
   dodam-open-api:
