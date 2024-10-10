@@ -19,6 +19,17 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.EC2_KEY }}
 
+    - name: Inject MySQL secrets into Docker Compose
+      run: |
+        sed -i "s/\${DGIT_MYSQL_USER}/${{ secrets.DGIT_MYSQL_USER }}/g" dgit-docker-compose.yml
+        sed -i "s/\${DGIT_MYSQL_PASSWORD}/${{ secrets.DGIT_MYSQL_PASSWORD }}/g" dgit-docker-compose.yml
+        scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa \
+          dauth-docker-compose.yml \
+          dgit-docker-compose.yml \
+          dodamdodam-docker-compose.yml \
+          nginx-docker-compose.yml \
+          ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/docker/
+
     - name: Copy Docker Compose files to EC2
       run: |
         scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa \
