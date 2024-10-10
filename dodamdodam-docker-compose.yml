@@ -1,5 +1,6 @@
 networks:
   dodam-redis-net:
+    name: dodam-redis-net
     driver: bridge
   nginx-net:
     external: true
