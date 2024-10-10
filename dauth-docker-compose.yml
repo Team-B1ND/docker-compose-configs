@@ -27,7 +27,7 @@ services:
   dauth-redis:
     container_name: dauth-redis
     image: redis:alpine
-    port: "6379:6379"
+    ports: "6379:6379"
     networks:
       - dodam-redis-net  
       - nginx-net
