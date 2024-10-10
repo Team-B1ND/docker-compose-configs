@@ -19,8 +19,8 @@ services:
     volumes:
       - dgit-mysql-data:/var/lib/mysql
     environment:
-      MYSQL_USER: ${secrets.DGIT_MYSQL_USER}
-      MYSQL_PASSWORD: ${secrets.DGIT_MYSQL_PASSWORD}
+      MYSQL_USER: ${DGIT_MYSQL_USER}
+      MYSQL_PASSWORD: ${DGIT_MYSQL_PASSWORD}
     networks:
       - dgit-net
       - nginx-net
