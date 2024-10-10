@@ -18,7 +18,7 @@ services:
 
   token-server:
     container_name: dodam-token-server
-    image: teamb1nd/token-server:latest
+    image: teamb1nd/nest-token-server:latest
     platform: linux/arm64
     ports:
       - "8050:8050"
