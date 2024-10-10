@@ -5,11 +5,6 @@ services:
     platform: linux/arm64
     ports:
       - "3586:8080" 
-    environment:
-      - DB_HOST=${{ secrets.DB_HOST }}
-      - DB_PORT=${{ secrets.DB_PORT }}
-      - DB_USER=${{ secrets.DB_USER }}
-      - DB_PASSWORD=${{ secrets.DB_PASSWORD }}
     depends_on:
       - dgit-mysql
     networks:
@@ -23,6 +18,9 @@ services:
       - "33307:3306"
     volumes:
       - dgit-mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_USER: ${secrets.DGIT_MYSQL_USER}
+      MYSQL_PASSWORD: ${secrets.DGIT_MYSQL_PASSWORD}
     networks:
       - dgit-net
       - nginx-net
