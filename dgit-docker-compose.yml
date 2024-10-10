@@ -9,7 +9,6 @@ services:
       - dgit-mysql
     networks:
       - nginx-net
-    restart: no
 
   dgit-mysql:
     container_name: dgit-mysql
@@ -21,6 +20,7 @@ services:
     environment:
       MYSQL_USER: ${DGIT_MYSQL_USER}
       MYSQL_PASSWORD: ${DGIT_MYSQL_PASSWORD}
+    restart: no
     networks:
       - dgit-net
       - nginx-net
