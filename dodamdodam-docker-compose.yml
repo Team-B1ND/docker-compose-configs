@@ -35,7 +35,6 @@ services:
       - dodam-redis-data:/data 
     networks:
       - dodam-redis-net
-      - nginx-net
 
   redis-slave-1:
     container_name: dodam-redis-slave1
@@ -47,7 +46,6 @@ services:
       - redis
     networks:
       - dodam-redis-net
-      - nginx-net
 
   redis-slave-2:
     container_name: dodam-redis-slave2
@@ -59,7 +57,6 @@ services:
       - redis
     networks:
       - dodam-redis-net
-      - nginx-net
 
 volumes:
   dodam-redis-data:

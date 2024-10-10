@@ -31,4 +31,3 @@ services:
       - "6379:6379"
     networks:
       - dauth-redis-net  
-      - nginx-net

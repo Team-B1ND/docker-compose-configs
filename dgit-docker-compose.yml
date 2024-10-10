@@ -23,7 +23,6 @@ services:
     restart: no
     networks:
       - dgit-net
-      - nginx-net
 
 networks:
   dgit-net:
