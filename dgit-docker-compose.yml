@@ -20,6 +20,7 @@ services:
     environment:
       MYSQL_USER: ${DGIT_MYSQL_USER}
       MYSQL_PASSWORD: ${DGIT_MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DGIT_MYSQL_ROOT_PASSWORD}
     restart: no
     networks:
       - dgit-net
