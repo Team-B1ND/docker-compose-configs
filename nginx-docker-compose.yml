@@ -7,12 +7,24 @@ services:
     volumes:
       - /etc/nginx/nginx.conf:/etc/nginx/nginx.conf
       - dodam:/var/lib/docker/volumes/dodam/_data
+      - dgit:/var/lib/docker/volumes/dgit/_data
+      - dauth:/var/lib/docker/volumes/dauth/_data
+      - dauth-docs:/var/lib/docker/volumes/dauth-docs/_data
+      - alimo:/var/lib/docker/volumes/alimo/_data
 
     networks:
       - nginx-net
 
 volumes:
   dodam:
+    external: true
+  dgit:
+    external: true
+  dauth:
+    external: true
+  dauth-docs:
+    external: true
+  alimo:
     external: true
 
 networks:
