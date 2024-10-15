@@ -23,6 +23,7 @@ jobs:
       run: |
         sed -i "s/\${DGIT_MYSQL_USER}/${{ secrets.DGIT_MYSQL_USER }}/g" dgit-docker-compose.yml
         sed -i "s/\${DGIT_MYSQL_PASSWORD}/${{ secrets.DGIT_MYSQL_PASSWORD }}/g" dgit-docker-compose.yml
+        sed -i "s/\${DGIT_MYSQL_ROOT_PASSWORD}/${{ secrets.DGIT_MYSQL_ROOT_PASSWORD }}/g" dgit-docker-compose.yml
         scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa \
           dauth-docker-compose.yml \
           dgit-docker-compose.yml \
