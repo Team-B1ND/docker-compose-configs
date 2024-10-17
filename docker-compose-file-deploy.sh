@@ -14,7 +14,7 @@ configs=$(echo "$configs" | jq --arg user "${MAIN_EC2_USER}" \
                                       if .server.key == "MAIN_EC2_KEY_PLACEHOLDER" then .server.key = $key else . end)')
 
 # 서버 정보 읽기 및 파일 전송
-for config in $(echo "$configs" | jq -c '.[]'); do
+echo "$configs" | jq -c '.[]' | while IFS= read -r config; do
   file_name=$(echo "$config" | jq -r '.file_name')
   user=$(echo "$config" | jq -r '.server.user')
   host=$(echo "$config" | jq -r '.server.host')
