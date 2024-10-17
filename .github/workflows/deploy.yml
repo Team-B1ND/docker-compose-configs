@@ -14,28 +14,27 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Add SSH key
-      uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: ${{ secrets.EC2_KEY }}
+    - name: Install Dependencies
+      run: sudo apt-get update && sudo apt-get install -y jq sshpass
 
-    - name: Inject MySQL secrets into Docker Compose
+    - name: Read Configs
+      id: read_configs
       run: |
-        sed -i "s/\${DGIT_MYSQL_USER}/${{ secrets.DGIT_MYSQL_USER }}/g" dgit-docker-compose.yml
-        sed -i "s/\${DGIT_MYSQL_PASSWORD}/${{ secrets.DGIT_MYSQL_PASSWORD }}/g" dgit-docker-compose.yml
-        sed -i "s/\${DGIT_MYSQL_ROOT_PASSWORD}/${{ secrets.DGIT_MYSQL_ROOT_PASSWORD }}/g" dgit-docker-compose.yml
-        scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa \
-          dauth-docker-compose.yml \
-          dgit-docker-compose.yml \
-          dodamdodam-docker-compose.yml \
-          nginx-docker-compose.yml \
-          ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/docker/
+        configs=$(cat .deploy/config.yml | yq '.configs')
+        echo "::set-output name=configs::$configs"
 
-    - name: Copy Docker Compose files to EC2
+    - name: Deploy Files to Servers
+      env:
+        CONFIGS: ${{ steps.read_configs.outputs.configs }}
       run: |
-        scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa \
-          dauth-docker-compose.yml \
-          dgit-docker-compose.yml \
-          dodamdodam-docker-compose.yml \
-          nginx-docker-compose.yml \
-          ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/docker/
+        echo "$CONFIGS" | jq -c '.[]' | while read config; do
+          FILE_NAME=$(echo "$config" | jq -r '.file_name')
+          SERVER_USER=$(echo "$config" | jq -r '.server_user')
+          SERVER_HOST=$(echo "$config" | jq -r '.server_host')
+          SERVER_KEY=$(echo "$config" | jq -r '.server_key')
+
+          echo "Deploying $FILE_NAME to $SERVER_USER@$SERVER_HOST"
+
+          sshpass -p "$SERVER_KEY" scp -o StrictHostKeyChecking=no \
+            "./$FILE_NAME" "$SERVER_USER@$SERVER_HOST:/home/$SERVER_USER/docker/"
+        done
