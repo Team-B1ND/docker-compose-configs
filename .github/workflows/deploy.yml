@@ -1,21 +1,25 @@
-name: Deploy to Multiple Servers
+name: Deploy
 
 on:
   push:
     branches:
-      - main  # 원하는 브랜치로 설정
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Run Deployment Script
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Set up yq
+        uses: chrisdickinson/setup-yq@latest
+
+      - name: Deploy using script
+        env: 
+          MAIN_EC2_USER: ${{ secrets.MAIN_EC2_USER }}
+          MAIN_EC2_HOST: ${{ secrets.MAIN_EC2_HOST }}
+          MAIN_EC2_KEY: ${{ secrets.MAIN_EC2_KEY }}
         run: |
-          chmod +x docker-compose-file-deploy.sh
-          ./docker-compose-file-deploy.sh
+          chmod +x deploy.sh
+          ./deploy.sh

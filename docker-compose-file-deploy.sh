@@ -1,30 +1,24 @@
-# yq 바이너리 다운로드 및 설치
-mkdir -p $HOME/bin
-YQ_VERSION="v4.34.1"  # 원하는 yq 버전으로 설정
-echo "Downloading yq for AMD architecture"
-curl -L -o $HOME/bin/yq "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64"
-chmod +x $HOME/bin/yq
-echo "$HOME/bin" >> $GITHUB_PATH  # $HOME/bin을 PATH에 추가
+set -e
 
 # YAML 파일을 JSON으로 변환
-servers=$($HOME/bin/yq eval '.servers' .deploy/config.yml)
-echo "::set-output name=servers::$servers"
+configs=$($HOME/bin/yq eval '.configs' .deploy/config.yml)
 
-# SSH 비공개 키를 임시 파일로 저장
-echo "${SSH_PRIVATE_KEY}" > private_key
-chmod 600 private_key
+# server 정보 대체
+configs=$(echo "$configs" | jq --arg user "${MAIN_EC2_USER}" \
+                                 --arg host "${MAIN_EC2_HOST}" \
+                                 --arg key "${MAIN_EC2_KEY}" \
+                                 'map(if .server.user == "USER_PLACEHOLDER" then .server.user = $user else . end |
+                                      if .server.host == "HOST_PLACEHOLDER" then .server.host = $host else . end |
+                                      if .server.key == "KEY_PLACEHOLDER" then .server.key = $key else . end)')
 
 # 서버 정보 읽기 및 파일 전송
-for server in $(echo "${servers}" | jq -c '.[]'); do
-  name=$(echo "$server" | jq -r '.name')
-  ip=$(echo "$server" | jq -r '.ip')
-  user=$(echo "$server" | jq -r '.user')
-  files=$(echo "$server" | jq -r '.files | join(" ")')
-  echo "Deploying files to $name ($ip) as user $user"
-  
-  # 파일 전송
-  for file in $files; do
-    echo "Sending $file to $user@$ip:/destination/path/"
-    scp -i private_key "$file" "$user@$ip:/destination/path/"
-  done
+for config in $(echo "$configs" | jq -c '.[]'); do
+  file_name=$(echo "$config" | jq -r '.file_name')
+  user=$(echo "$config" | jq -r '.server.user')
+  host=$(echo "$config" | jq -r '.server.host')
+  key=$(echo "$config" | jq -r '.server.key')
+
+  echo "Deploying $file_name to $host as user $user"
+  echo "Sending $file_name to $user@$host:/destination/path/"
+  scp -i "$key" "$file_name" "$user@$host:/destination/path/"
 done
