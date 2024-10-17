@@ -15,18 +15,18 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Install Dependencies
-      run: sudo apt-get update && sudo apt-get install -y rsync
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y jq sshpass yq
 
     - name: Read Configs
       id: read_configs
       run: |
         configs=$(yq '.configs' .deploy/config.yml)
         echo "Configs: $configs"
-        echo "::set-output name=configs::$configs"
+        echo "CONFIGS=$configs" >> $GITHUB_ENV  # Updated to use the new environment file approach
 
     - name: Deploy Files to Servers
-      env:
-        CONFIGS: ${{ steps.read_configs.outputs.configs }}
       run: |
         echo "$CONFIGS" | jq -c '.[]' | while read config; do
           FILE_NAME=$(echo "$config" | jq -r '.file_name')
@@ -35,6 +35,6 @@ jobs:
           SERVER_KEY=$(echo "$config" | jq -r '.server_key')
           
           echo "Deploying $FILE_NAME to $SERVER_USER@$SERVER_HOST"
-          rsync -avz -e "ssh -o StrictHostKeyChecking=no -i /path/to/private/key" \
+          rsync -avz -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa" \
             "./$FILE_NAME" "$SERVER_USER@$SERVER_HOST:/home/$SERVER_USER/docker/"
         done
