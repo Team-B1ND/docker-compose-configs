@@ -19,6 +19,7 @@ jobs:
         run: |
           which yq
           yq --version
+          
 
       - name: Deploy using script
         env: 
