@@ -1,20 +1,20 @@
 configs:
   - file_name: dauth-docker-compose.yml
-    server_user: ${{ secrets.MAIN_EC2_USER }}
-    server_host: ${{ secrets.MAIN_EC2_HOST }}
-    server_key: ${{ secrets.MAIN_EC2_KEY }}
+    server_user: ${MAIN_EC2_USER}
+    server_host: ${MAIN_EC2_HOST}
+    server_key: ${MAIN_EC2_KEY}
 
   - file_name: dgit-docker-compose.yml
-    server_user: ${{ secrets.MAIN_EC2_USER }}
-    server_host: ${{ secrets.MAIN_EC2_HOST }}
-    server_key: ${{ secrets.MAIN_EC2_KEY }}
+    server_user: ${MAIN_EC2_USER}
+    server_host: ${MAIN_EC2_HOST}
+    server_key: ${MAIN_EC2_KEY}
 
   - file_name: dodamdodam-docker-compose.yml
-    server_user: ${{ secrets.MAIN_EC2_USER }}
-    server_host: ${{ secrets.MAIN_EC2_HOST }}
-    server_key: ${{ secrets.MAIN_EC2_KEY }}
+    server_user: ${MAIN_EC2_USER}
+    server_host: ${MAIN_EC2_HOST}
+    server_key: ${MAIN_EC2_KEY}
 
   - file_name: nginx-docker-compose.yml
-    server_user: ${{ secrets.MAIN_EC2_USER }}
-    server_host: ${{ secrets.MAIN_EC2_HOST }}
-    server_key: ${{ secrets.MAIN_EC2_KEY }}
+    server_user: ${MAIN_EC2_USER}
+    server_host: ${MAIN_EC2_HOST}
+    server_key: ${MAIN_EC2_KEY}
