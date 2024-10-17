@@ -3,39 +3,48 @@ name: Deploy to EC2
 on:
   push:
     branches:
-      - main 
+      - main  # 원하는 브랜치로 설정
 
 jobs:
   deploy:
-    name: Deploy Docker Compose Files to EC2
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Install Dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y jq sshpass
-        sudo snap install yq 
+      - name: Install yq
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y yq
 
-    - name: Read Configs
-      id: read_configs
-      run: |
-        configs=$(yq '.configs' .deploy/config.yml)
-        echo "Configs: $configs"
-        echo "CONFIGS=$configs" >> $GITHUB_ENV
+      - name: Load server configuration
+        id: load_servers
+        run: |
+          # yq를 사용하여 YAML 파일을 JSON으로 변환
+          servers=$(yq eval '.servers' .deploy/config.yml)
+          echo "::set-output name=servers::$servers"
 
-    - name: Deploy Files to Servers
-      run: |
-        echo "$CONFIGS" | jq -c '.[]' | while read config; do
-          FILE_NAME=$(echo "$config" | jq -r '.file_name')
-          SERVER_USER=$(echo "$config" | jq -r '.server_user')
-          SERVER_HOST=$(echo "$config" | jq -r '.server_host')
-          SERVER_KEY=$(echo "$config" | jq -r '.server_key')
-          
-          echo "Deploying $FILE_NAME to $SERVER_USER@$SERVER_HOST"
-          rsync -avz -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa" \
-            "./$FILE_NAME" "$SERVER_USER@$SERVER_HOST:/home/$SERVER_USER/docker/"
-        done
+      - name: Deploy files to servers
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          # SSH를 통한 서버 접속 및 파일 전송
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key
+          chmod 600 private_key
+
+          # 서버 정보 읽기
+          for server in $(echo "${{ steps.load_servers.outputs.servers }}" | jq -c '.[]'); do
+            name=$(echo "$server" | jq -r '.name')
+            ip=$(echo "$server" | jq -r '.ip')
+            user=$(echo "$server" | jq -r '.user')
+            files=$(echo "$server" | jq -r '.files | join(" ")')
+
+            echo "Deploying files to $name ($ip) as user $user"
+
+            # 파일 전송
+            for file in $files; do
+              echo "Sending $file to $user@$ip:/destination/path/"
+              scp -i private_key "$file" "$user@$ip:/destination/path/"
+            done
+          done
