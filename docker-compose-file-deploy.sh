@@ -1,10 +1,9 @@
+#!/bin/bash
+
 set -e
 
-# yq 경로 확인
-YQ_PATH=$(which yq)
-
 # YAML 파일을 JSON으로 변환
-configs=$(/usr/local/bin/yq eval '.configs' .deploy/config.yml)
+configs=$(yq eval '.configs' .deploy/config.yml)
 
 # server 정보 대체
 configs=$(echo "$configs" | jq --arg user "${MAIN_EC2_USER}" \
