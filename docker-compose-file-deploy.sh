@@ -2,8 +2,8 @@
 
 set -e
 
-# YAML 파일을 JSON으로 변환 (yq 버전 3.x에 맞춰 수정)
-configs=$(yq r .deploy/config.yml 'configs')
+# YAML 파일을 JSON으로 변환
+configs=$(yq r .deploy/config.yml configs)
 
 # server 정보 대체
 configs=$(echo "$configs" | jq --arg user "${MAIN_EC2_USER}" \
@@ -14,7 +14,7 @@ configs=$(echo "$configs" | jq --arg user "${MAIN_EC2_USER}" \
                                       if .server.key == "MAIN_EC2_KEY_PLACEHOLDER" then .server.key = $key else . end)')
 
 # 서버 정보 읽기 및 파일 전송
-echo "$configs" | jq -c '.[]' | while IFS= read -r config; do
+for config in $(echo "$configs" | jq -c '.[]'); do
   file_name=$(echo "$config" | jq -r '.file_name')
   user=$(echo "$config" | jq -r '.server.user')
   host=$(echo "$config" | jq -r '.server.host')
