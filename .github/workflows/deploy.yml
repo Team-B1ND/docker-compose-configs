@@ -17,14 +17,15 @@ jobs:
     - name: Install Dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y jq sshpass yq
+        sudo apt-get install -y jq sshpass
+        sudo snap install yq 
 
     - name: Read Configs
       id: read_configs
       run: |
         configs=$(yq '.configs' .deploy/config.yml)
         echo "Configs: $configs"
-        echo "CONFIGS=$configs" >> $GITHUB_ENV  # Updated to use the new environment file approach
+        echo "CONFIGS=$configs" >> $GITHUB_ENV
 
     - name: Deploy Files to Servers
       run: |
