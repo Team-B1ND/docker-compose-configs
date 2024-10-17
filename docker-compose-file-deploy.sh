@@ -3,7 +3,7 @@
 set -e
 
 # YAML 파일을 JSON으로 변환
-configs=$(yq '.configs' .deploy/config.yml)
+configs=$(yq eval '.configs' .deploy/config.yml)  # 'eval' 대신 'e'를 사용할 수도 있습니다.
 
 # server 정보 대체
 configs=$(echo "$configs" | jq --arg user "${MAIN_EC2_USER}" \
