@@ -1,6 +1,7 @@
-#!/bin/bash
-
 set -e
+
+# yq 경로 확인
+YQ_PATH=$(which yq)
 
 # YAML 파일을 JSON으로 변환
 configs=$(/usr/local/bin/yq eval '.configs' .deploy/config.yml)
