@@ -2,8 +2,8 @@
 
 set -e
 
-# YAML 파일을 JSON으로 변환 (yq 버전 4.x에 맞춰 수정)
-configs=$(yq e '.configs' .deploy/config.yml)
+# YAML 파일을 JSON으로 변환 (yq 버전 3.x에 맞춰 수정)
+configs=$(yq r .deploy/config.yml 'configs')
 
 # server 정보 대체
 configs=$(echo "$configs" | jq --arg user "${MAIN_EC2_USER}" \
