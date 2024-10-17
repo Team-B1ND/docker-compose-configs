@@ -1,4 +1,4 @@
-name: Deploy to EC2
+name: Deploy to EC2
 
 on:
   push:
@@ -16,15 +16,17 @@ jobs:
       - name: Install yq
         run: |
           # yq 바이너리 다운로드 및 설치
+          mkdir -p $HOME/bin
           YQ_VERSION="v4.34.1"  # 원하는 yq 버전으로 설정
-          curl -L -o /usr/bin/yq "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64"
-          chmod +x /usr/bin/yq
+          curl -L -o $HOME/bin/yq "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_arm"
+          chmod +x $HOME/bin/yq
+          echo "$HOME/bin" >> $GITHUB_PATH  # $HOME/bin을 PATH에 추가
 
       - name: Load server configuration
         id: load_servers
         run: |
           # yq를 사용하여 YAML 파일을 JSON으로 변환
-          servers=$(yq eval '.servers' .deploy/config.yml)
+          servers=$($HOME/bin/yq eval '.servers' .deploy/config.yml)
           echo "::set-output name=servers::$servers"
 
       - name: Deploy files to servers
