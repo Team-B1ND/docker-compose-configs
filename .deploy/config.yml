@@ -1,24 +1,24 @@
 configs:
   - file_name: dauth-docker-compose.yml
     server:
-      user: USER_PLACEHOLDER
-      host: HOST_PLACEHOLDER
-      key: KEY_PLACEHOLDER
+      user: MAIN_EC2_USER_PLACEHOLDER
+      host: MAIN_EC2_HOST_PLACEHOLDER
+      key: MAIN_EC2_KEY_PLACEHOLDER
 
   - file_name: dgit-docker-compose.yml
     server:
-      user: USER_PLACEHOLDER
-      host: HOST_PLACEHOLDER
+      user: MAIN_EC2_USER_PLACEHOLDER
+      host: MAIN_EC2_HOST_PLACEHOLDER
       key: KEY_PLACEHOLDER
 
   - file_name: dodamdodam-docker-compose.yml
     server:
-      user: USER_PLACEHOLDER
-      host: HOST_PLACEHOLDER
+      user: MAIN_EC2_USER_PLACEHOLDER
+      host: MAIN_EC2_HOST_PLACEHOLDER
       key: KEY_PLACEHOLDER
 
   - file_name: nginx-docker-compose.yml
     server:
-      user: USER_PLACEHOLDER
-      host: HOST_PLACEHOLDER
+      user: MAIN_EC2_USER_PLACEHOLDER
+      host: MAIN_EC2_HOST_PLACEHOLDER
       key: KEY_PLACEHOLDER
