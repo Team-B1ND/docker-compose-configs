@@ -15,8 +15,10 @@ jobs:
 
       - name: Install yq
         run: |
-          sudo apt-get update
-          sudo apt-get install -y yq
+          # yq 바이너리 다운로드 및 설치
+          YQ_VERSION="v4.34.1"  # 원하는 yq 버전으로 설정
+          curl -L -o /usr/bin/yq "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64"
+          chmod +x /usr/bin/yq
 
       - name: Load server configuration
         id: load_servers
